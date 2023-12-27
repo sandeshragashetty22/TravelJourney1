@@ -1,0 +1,20 @@
+<form (ngSubmit)="onSubmit()">
+  <ion-item>
+    <ion-label>Title</ion-label>
+    <ion-input [(ngModel)]="entry.title" name="title"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Content</ion-label>
+    <ion-textarea [(ngModel)]="entry.content" name="content"></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Date</ion-label>
+    <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="entry.date" name="date"></ion-datetime>
+  </ion-item>
+
+  <ion-button (click)="takePicture()">Take Picture</ion-button>
+
+  <ion-button type="submit">Save Entry</ion-button>
+</form>
