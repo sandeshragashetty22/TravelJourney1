@@ -1,20 +1,33 @@
 <form (ngSubmit)="onSubmit()">
+  <!-- Title -->
   <ion-item>
-    <ion-label>Title</ion-label>
-    <ion-input [(ngModel)]="entry.title" name="title"></ion-input>
+    <ion-input label="Title" [(ngModel)]="entry.title" name="title"></ion-input>
   </ion-item>
 
+  <!-- Content -->
   <ion-item>
-    <ion-label>Content</ion-label>
-    <ion-textarea [(ngModel)]="entry.content" name="content"></ion-textarea>
+    <ion-textarea label="Content" [(ngModel)]="entry.content" name="content"></ion-textarea>
   </ion-item>
 
+  <!-- Date -->
   <ion-item>
     <ion-label>Date</ion-label>
     <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="entry.date" name="date"></ion-datetime>
   </ion-item>
+  
+  
 
+  <!-- Display Captured Image -->
+  <img [src]="entry.imageURI" *ngIf="entry.imageURI" />
+
+  <!-- Display Map -->
+  <agm-map [latitude]="mapLat" [longitude]="mapLng" [zoom]="mapZoom">
+    <agm-marker [latitude]="mapLat" [longitude]="mapLng"></agm-marker>
+  </agm-map>
+
+  <!-- Take Picture Button -->
   <ion-button (click)="takePicture()">Take Picture</ion-button>
 
+  <!-- Save Entry Button -->
   <ion-button type="submit">Save Entry</ion-button>
 </form>
