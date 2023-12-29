@@ -15,6 +15,7 @@ export class ViewEntriesComponent {
 
   async initStorage() {
     await this.storage.create();
+    this.retrieveEntries();
   }
 
   async ngOnInit() {
@@ -23,16 +24,24 @@ export class ViewEntriesComponent {
 
   async retrieveEntries() {
     try {
-      const entry = await this.storage.get('entry');
-      if (entry) {
-        // If there are existing entries, push the new entry to the array
-        this.retrievedEntries.push(entry);
-        console.log('Retrieved entry:', entry);
+      const entries = await this.storage.get('entries');
+      if (entries) {
+        this.retrievedEntries = entries;
+        console.log('Retrieved entries:', this.retrievedEntries);
       } else {
-        console.log('No entry found.');
+        console.log('No entries found.');
       }
     } catch (error) {
-      console.error('Error retrieving entry:', error);
+      console.error('Error retrieving entries:', error);
+    }
+  }
+  async clearEntries() {
+    try {
+      await this.storage.remove('entries');
+      this.retrievedEntries = [];
+      console.log('Entries cleared.');
+    } catch (error) {
+      console.error('Error clearing entries:', error);
     }
   }
 }

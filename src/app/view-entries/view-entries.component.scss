@@ -1,0 +1,22 @@
+.entry-card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px 0 rgba(17, 133, 4, 0.2);
+    background-color: white; /* Set the background color to black */
+  }
+.entry-card ion-card-title,
+.entry-card ion-card-subtitle {
+  color: black; /* Set the text color for title and date to black */
+}
+  
+  .entry-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+  }
+  
+  ion-button {
+    margin-top: 20px;
+  }
+  

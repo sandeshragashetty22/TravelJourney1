@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Storage } from '@ionic/storage-angular';
-
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-create-entry',
@@ -25,19 +23,13 @@ export class CreateEntryComponent {
 
   constructor(
     private geolocation: Geolocation,
-    private camera: Camera,
     private storage: Storage
   ) {
     this.initStorage();
   }
 
   async initStorage() {
-    // Initialize Capacitor Filesystem
-    try {
-      await Filesystem.mkdir({ path: 'entries' });
-    } catch (error) {
-      console.error('Error creating directory:', error);
-    }
+    await this.storage.create();
   }
 
   onSubmit() {
@@ -67,21 +59,22 @@ export class CreateEntryComponent {
   }
 
   async takePicture() {
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      allowEdit: true,
-      saveToPhotoAlbum: false,
-      correctOrientation: true,
-    };
-
     try {
-      const imageData = await this.camera.getPicture(options);
-      this.entry.imageURI = 'data:image/jpeg;base64,' + imageData;
-      this.getGeolocation();
-      await this.saveEntry();
+      const image = await Camera.getPhoto({
+        quality: 100,
+        allowEditing: true,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera,
+        saveToGallery: false
+      });
+  
+      if (image && image.webPath) {
+        this.entry.imageURI = image.webPath;
+        this.getGeolocation();
+        await this.saveEntry();
+      } else {
+        console.log('No image path available.');
+      }
     } catch (err) {
       console.log('Error taking picture:', err);
     }
@@ -89,13 +82,11 @@ export class CreateEntryComponent {
 
   async saveEntry() {
     try {
-      const content = JSON.stringify(this.entry);
-      await Filesystem.writeFile({
-        path: `entries/entry_${Date.now()}.txt`,
-        data: content,
-        directory: Directory.Data,
-        encoding: Encoding.UTF8
-      });
+      // Save entry to storage
+      const entries = await this.storage.get('entries') || [];
+      entries.push(this.entry);
+      await this.storage.set('entries', entries);
+
       console.log('Entry saved successfully:', this.entry);
       this.resetForm();
     } catch (error) {
