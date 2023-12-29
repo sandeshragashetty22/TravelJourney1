@@ -1,0 +1,16 @@
+ion-content {
+    --background: #e64242;;
+  }
+  
+  ion-grid {
+    height: 100%;
+    
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Adjust as needed for smaller screens */
+  ion-col {
+    max-width: 400px;
+  }
+  

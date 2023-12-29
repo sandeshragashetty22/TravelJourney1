@@ -71,7 +71,6 @@ export class CreateEntryComponent {
       if (image && image.webPath) {
         this.entry.imageURI = image.webPath;
         this.getGeolocation();
-        await this.saveEntry();
       } else {
         console.log('No image path available.');
       }
