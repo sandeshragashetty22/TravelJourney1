@@ -24,9 +24,18 @@
           <!-- Display Captured Image -->
           <img [src]="entry.imageURI" *ngIf="entry.imageURI" />
 
-          <!-- Display Map -->
+          <!-- Display the full address -->
+          <ion-item>
+            <ion-label>Location Address</ion-label>
+            <ion-textarea [(ngModel)]="fullAddress" disabled></ion-textarea>
+          </ion-item>
+
+          <!-- Button to Get Location -->
+          <ion-button (click)="getCurrentLocation()">Get Current Location</ion-button>
+
+          <!-- Map Display -->
           <agm-map [latitude]="mapLat" [longitude]="mapLng" [zoom]="mapZoom">
-            <agm-marker [latitude]="mapLat" [longitude]="mapLng"></agm-marker>
+          <agm-marker [latitude]="mapLat" [longitude]="mapLng"></agm-marker>
           </agm-map>
 
           <!-- Take Picture Button -->

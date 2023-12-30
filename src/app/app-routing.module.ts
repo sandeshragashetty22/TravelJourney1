@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-
-// Import your components (create-entry and view-entry)
 import { CreateEntryComponent } from './create-entry/create-entry.component';
 import { ViewEntriesComponent } from './view-entries/view-entries.component';
 
@@ -16,12 +14,12 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
-    path: 'create-entry', // Route for creating an entry
-    component: CreateEntryComponent // Map this route to CreateEntryComponent
+    path: 'create-entry', 
+    component: CreateEntryComponent 
   },
   {
-    path: 'view-entries', // Route for viewing entries
-    component: ViewEntriesComponent // Map this route to ViewEntryComponent
+    path: 'view-entries', 
+    component: ViewEntriesComponent 
   },
   {
     path: '', // Default route (redirect to home)
@@ -29,8 +27,8 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: '**', // Wildcard route for handling unknown routes
-    redirectTo: 'home' // Redirect to home if route not found
+    path: '**', 
+    redirectTo: 'home'
   }
 ];
 

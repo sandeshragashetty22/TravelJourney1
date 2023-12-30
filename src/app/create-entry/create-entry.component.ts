@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Storage } from '@ionic/storage-angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Router } from '@angular/router';
+import { Geolocation } from '@capacitor/geolocation';
+
 
 @Component({
   selector: 'app-create-entry',
@@ -20,10 +22,11 @@ export class CreateEntryComponent {
   mapLat: number = 0;
   mapLng: number = 0;
   mapZoom: number = 15;
+  fullAddress: string = '';
 
   constructor(
-    private geolocation: Geolocation,
-    private storage: Storage
+    private storage: Storage,
+    private router: Router
   ) {
     this.initStorage();
   }
@@ -49,13 +52,21 @@ export class CreateEntryComponent {
     this.mapLng = 0;
   }
 
-  getGeolocation() {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.mapLat = resp.coords.latitude;
-      this.mapLng = resp.coords.longitude;
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
+  async getCurrentLocation() {
+    try {
+      const coordinates = await Geolocation.getCurrentPosition();
+      this.mapLat = coordinates.coords.latitude;
+      this.mapLng = coordinates.coords.longitude;
+  
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${this.mapLat}&lon=${this.mapLng}&format=json`);
+      const data = await response.json();
+  
+      console.log('Fetched address data:', data); // Check the data retrieved
+  
+      this.fullAddress = data.display_name;
+    } catch (error) {
+      console.error('Error getting location', error);
+    }
   }
 
   async takePicture() {
@@ -70,7 +81,6 @@ export class CreateEntryComponent {
   
       if (image && image.webPath) {
         this.entry.imageURI = image.webPath;
-        this.getGeolocation();
       } else {
         console.log('No image path available.');
       }
@@ -91,5 +101,7 @@ export class CreateEntryComponent {
     } catch (error) {
       console.error('Error saving entry:', error);
     }
+      // Navigate to home page after saving entry
+      this.router.navigate(['/home']);
   }
 }
